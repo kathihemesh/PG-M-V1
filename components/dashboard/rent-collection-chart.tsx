@@ -1,0 +1,102 @@
+"use client"
+
+import {
+  Bar,
+  BarChart,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+} from "recharts"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+import {
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@/components/ui/chart"
+
+const rentData = [
+  { month: "Jan", collected: 45000, pending: 5000 },
+  { month: "Feb", collected: 48000, pending: 2000 },
+  { month: "Mar", collected: 47000, pending: 3000 },
+  { month: "Apr", collected: 50000, pending: 0 },
+  { month: "May", collected: 49000, pending: 1000 },
+  { month: "Jun", collected: 52000, pending: 3000 },
+]
+
+export function RentCollectionChart() {
+  return (
+    <Card className="min-w-0 overflow-hidden transition-shadow hover:shadow-md">
+      <CardHeader className="pb-4">
+        <CardTitle className="text-lg font-semibold">Monthly Rent Collection</CardTitle>
+        <CardDescription>
+          Collected vs pending rent over the last 6 months
+        </CardDescription>
+      </CardHeader>
+      <CardContent className="p-2 pb-4 sm:p-6 sm:pt-0">
+        <ChartContainer
+          config={{
+            collected: {
+              label: "Collected",
+              color: "hsl(142, 71%, 45%)",
+            },
+            pending: {
+              label: "Pending",
+              color: "hsl(38, 92%, 50%)",
+            },
+          }}
+          className="aspect-[4/3] w-full max-h-[300px]"
+        >
+          <BarChart
+            data={rentData}
+            margin={{ top: 10, right: 10, left: 0, bottom: 0 }}
+          >
+            <CartesianGrid 
+              strokeDasharray="3 3" 
+              className="stroke-border" 
+              vertical={false}
+              stroke="currentColor"
+              strokeOpacity={0.1}
+            />
+            <XAxis
+              dataKey="month"
+              tickLine={false}
+              axisLine={false}
+              tick={{ fontSize: 11, fill: "currentColor", fillOpacity: 0.7 }}
+              tickMargin={8}
+            />
+            <YAxis
+              tickLine={false}
+              axisLine={false}
+              tick={{ fontSize: 11, fill: "currentColor", fillOpacity: 0.7 }}
+              tickFormatter={(value) => `₹${value / 1000}k`}
+              width={45}
+            />
+            <ChartTooltip
+              content={
+                <ChartTooltipContent
+                  formatter={(value) => `₹${Number(value).toLocaleString()}`}
+                />
+              }
+            />
+            <Bar
+              dataKey="collected"
+              fill="var(--color-collected)"
+              radius={[4, 4, 0, 0]}
+            />
+            <Bar
+              dataKey="pending"
+              fill="var(--color-pending)"
+              radius={[4, 4, 0, 0]}
+            />
+          </BarChart>
+        </ChartContainer>
+      </CardContent>
+    </Card>
+  )
+}
