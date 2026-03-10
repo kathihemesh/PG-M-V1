@@ -15,9 +15,9 @@ import {
 } from "@/components/ui/chart"
 
 const statusData = [
-  { name: "Paid", value: 18, color: "hsl(142, 71%, 45%)" },
-  { name: "Pending", value: 4, color: "hsl(38, 92%, 50%)" },
-  { name: "Late", value: 2, color: "hsl(0, 84%, 60%)" },
+  { name: "Paid", value: 18, color: "var(--color-success)" },
+  { name: "Pending", value: 4, color: "var(--color-warning)" },
+  { name: "Late", value: 2, color: "var(--color-destructive)" },
 ]
 
 export function PaymentStatusChart() {
@@ -32,15 +32,15 @@ export function PaymentStatusChart() {
           config={{
             paid: {
               label: "Paid",
-              color: "hsl(142, 71%, 45%)",
+              color: "var(--color-success)",
             },
             pending: {
               label: "Pending",
-              color: "hsl(38, 92%, 50%)",
+              color: "var(--color-warning)",
             },
             late: {
               label: "Late",
-              color: "hsl(0, 84%, 60%)",
+              color: "var(--color-destructive)",
             },
           }}
           className="mx-auto aspect-square w-full max-h-[300px]"
@@ -54,9 +54,23 @@ export function PaymentStatusChart() {
               outerRadius="55%"
               paddingAngle={2}
               dataKey="value"
-              label={({ name, percent }) =>
-                `${name} ${(percent * 100).toFixed(0)}%`
-              }
+              label={({ name, percent, cx, cy, midAngle, outerRadius }) => {
+                const RADIAN = Math.PI / 180;
+                const radius = Number(outerRadius) * 1.35;
+                const x = Number(cx) + radius * Math.cos(-midAngle * RADIAN);
+                const y = Number(cy) + radius * Math.sin(-midAngle * RADIAN);
+                return (
+                  <text
+                    x={x}
+                    y={y}
+                    textAnchor={x > Number(cx) ? "start" : "end"}
+                    dominantBaseline="central"
+                    className="fill-foreground text-xs font-medium"
+                  >
+                    {`${name} ${(percent * 100).toFixed(0)}%`}
+                  </text>
+                );
+              }}
               labelLine={false}
             >
               {statusData.map((entry, index) => (

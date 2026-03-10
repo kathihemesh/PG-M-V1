@@ -81,7 +81,7 @@ export function Header({ title, onMenuClick, isMobileMenuOpen }: HeaderProps) {
                 <Bell className="h-5 w-5" aria-hidden="true" />
                 {notificationCount > 0 && (
                   <span 
-                    className="absolute right-1 top-1 flex h-4 w-4 items-center justify-center rounded-full bg-destructive text-[10px] font-semibold text-white"
+                    className="absolute right-1 top-1 flex h-4 w-4 items-center justify-center rounded-full bg-destructive text-[10px] font-semibold text-destructive-foreground"
                     aria-hidden="true"
                   >
                     {notificationCount}

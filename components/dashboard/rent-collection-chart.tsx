@@ -43,11 +43,11 @@ export function RentCollectionChart() {
           config={{
             collected: {
               label: "Collected",
-              color: "hsl(142, 71%, 45%)",
+              color: "var(--color-success)",
             },
             pending: {
               label: "Pending",
-              color: "hsl(38, 92%, 50%)",
+              color: "var(--color-warning)",
             },
           }}
           className="aspect-[4/3] w-full max-h-[300px]"
