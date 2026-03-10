@@ -174,37 +174,37 @@ export default function RoomsPage() {
   return (
     <DashboardLayout title="Rooms">
       {/* Summary Cards */}
-      <div className="mb-6 grid gap-4 grid-cols-3">
+      <div className="mb-6 grid gap-4 grid-cols-1 sm:grid-cols-3">
         <Card className="transition-shadow hover:shadow-md">
-          <CardContent className="flex items-center gap-3 p-4 sm:gap-4 sm:p-5">
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-success/10 sm:h-12 sm:w-12">
+          <CardContent className="flex items-center gap-4 p-4 sm:p-5">
+            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-success/10 sm:h-12 sm:w-12">
               <DoorOpen className="h-5 w-5 text-success sm:h-6 sm:w-6" />
             </div>
-            <div className="min-w-0">
-              <p className="text-xs font-medium text-muted-foreground sm:text-sm">Occupied</p>
-              <p className="text-xl font-bold sm:text-2xl">{occupiedCount}</p>
+            <div className="min-w-0 flex-1">
+              <p className="text-sm font-medium text-muted-foreground">Occupied</p>
+              <p className="text-2xl font-bold">{occupiedCount}</p>
             </div>
           </CardContent>
         </Card>
         <Card className="transition-shadow hover:shadow-md">
-          <CardContent className="flex items-center gap-3 p-4 sm:gap-4 sm:p-5">
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 sm:h-12 sm:w-12">
+          <CardContent className="flex items-center gap-4 p-4 sm:p-5">
+            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary/10 sm:h-12 sm:w-12">
               <DoorOpen className="h-5 w-5 text-primary sm:h-6 sm:w-6" />
             </div>
-            <div className="min-w-0">
-              <p className="text-xs font-medium text-muted-foreground sm:text-sm">Vacant</p>
-              <p className="text-xl font-bold sm:text-2xl">{vacantCount}</p>
+            <div className="min-w-0 flex-1">
+              <p className="text-sm font-medium text-muted-foreground">Vacant</p>
+              <p className="text-2xl font-bold">{vacantCount}</p>
             </div>
           </CardContent>
         </Card>
         <Card className="transition-shadow hover:shadow-md">
-          <CardContent className="flex items-center gap-3 p-4 sm:gap-4 sm:p-5">
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-warning/10 sm:h-12 sm:w-12">
+          <CardContent className="flex items-center gap-4 p-4 sm:p-5">
+            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-warning/10 sm:h-12 sm:w-12">
               <DoorOpen className="h-5 w-5 text-warning sm:h-6 sm:w-6" />
             </div>
-            <div className="min-w-0">
-              <p className="text-xs font-medium text-muted-foreground sm:text-sm">Maintenance</p>
-              <p className="text-xl font-bold sm:text-2xl">{maintenanceCount}</p>
+            <div className="min-w-0 flex-1">
+              <p className="text-sm font-medium text-muted-foreground">Maintenance</p>
+              <p className="text-2xl font-bold">{maintenanceCount}</p>
             </div>
           </CardContent>
         </Card>

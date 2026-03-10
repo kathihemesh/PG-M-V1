@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useCallback } from "react"
+import { useState, useCallback, useEffect } from "react"
 import { Sidebar } from "./sidebar"
 import { Header } from "./header"
 
@@ -11,10 +11,28 @@ interface DashboardLayoutProps {
 
 export function DashboardLayout({ children, title }: DashboardLayoutProps) {
   const [mobileOpen, setMobileOpen] = useState(false)
+  const [collapsed, setCollapsed] = useState(false)
+
+  // Persist collapsed state in localStorage
+  useEffect(() => {
+    const saved = localStorage.getItem("sidebar-collapsed")
+    if (saved !== null) {
+      setCollapsed(saved === "true")
+    }
+  }, [])
+
+  const handleCollapsedChange = useCallback((value: boolean) => {
+    setCollapsed(value)
+    localStorage.setItem("sidebar-collapsed", String(value))
+  }, [])
 
   const handleMenuToggle = useCallback(() => {
     setMobileOpen((prev) => !prev)
   }, [])
+
+  const handleSidebarToggle = useCallback(() => {
+    handleCollapsedChange(!collapsed)
+  }, [collapsed, handleCollapsedChange])
 
   return (
     <div className="min-h-screen overflow-x-hidden bg-background">
@@ -26,13 +44,20 @@ export function DashboardLayout({ children, title }: DashboardLayoutProps) {
         Skip to main content
       </a>
       
-      <Sidebar mobileOpen={mobileOpen} setMobileOpen={setMobileOpen} />
+      <Sidebar 
+        mobileOpen={mobileOpen} 
+        setMobileOpen={setMobileOpen}
+        collapsed={collapsed}
+        setCollapsed={handleCollapsedChange}
+      />
       
-      <div className="flex min-w-0 max-w-full flex-col lg:pl-64">
+      <div className={`flex min-w-0 max-w-full flex-col transition-all duration-300 ${collapsed ? "lg:pl-[72px]" : "lg:pl-64"}`}>
         <Header
           title={title}
           onMenuClick={handleMenuToggle}
           isMobileMenuOpen={mobileOpen}
+          collapsed={collapsed}
+          onSidebarToggle={handleSidebarToggle}
         />
         <main 
           id="main-content"
