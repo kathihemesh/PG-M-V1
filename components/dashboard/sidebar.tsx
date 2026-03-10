@@ -164,7 +164,7 @@ export function Sidebar({ mobileOpen, setMobileOpen, collapsed, setCollapsed }: 
         )}
       >
         {/* Logo */}
-        <div className="flex h-16 shrink-0 items-center justify-between border-b border-border px-4 overflow-hidden">
+        <div className="flex h-16 shrink-0 items-center justify-between overflow-hidden border-b border-border px-4">
           <Link 
             href="/" 
             className={cn(
@@ -177,7 +177,7 @@ export function Sidebar({ mobileOpen, setMobileOpen, collapsed, setCollapsed }: 
               <Building2 className="h-5 w-5 text-primary-foreground" />
             </div>
             <span className={cn(
-              "whitespace-nowrap text-lg font-semibold tracking-tight text-foreground transition-opacity duration-300",
+              "whitespace-nowrap text-lg font-semibold tracking-tight text-foreground transition-all duration-300 ease-in-out",
               collapsed ? "lg:w-0 lg:opacity-0" : "lg:w-auto lg:opacity-100"
             )}>
               PG Manager
@@ -195,7 +195,7 @@ export function Sidebar({ mobileOpen, setMobileOpen, collapsed, setCollapsed }: 
         </div>
 
         {/* Navigation */}
-        <nav className="flex-1 overflow-y-auto px-3 py-4" aria-labelledby={`${navId}-label`}>
+        <nav className="flex-1 overflow-y-auto overflow-x-hidden px-3 py-4" aria-labelledby={`${navId}-label`}>
           <h2 id={`${navId}-label`} className="sr-only">Main navigation</h2>
           <ul className="flex flex-col gap-1" role="list">
             {navItems.map((item) => {
@@ -206,7 +206,7 @@ export function Sidebar({ mobileOpen, setMobileOpen, collapsed, setCollapsed }: 
                   aria-current={isActive ? "page" : undefined}
                   aria-describedby={collapsed ? undefined : `${navId}-${item.label.toLowerCase()}-desc`}
                   className={cn(
-                    "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+                    "flex items-center gap-3 overflow-hidden rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-300 ease-in-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
                     isActive
                       ? "bg-primary text-primary-foreground shadow-sm"
                       : "text-muted-foreground hover:bg-muted hover:text-foreground",
@@ -215,8 +215,8 @@ export function Sidebar({ mobileOpen, setMobileOpen, collapsed, setCollapsed }: 
                 >
                   <item.icon className="h-5 w-5 shrink-0" aria-hidden="true" />
                   <span className={cn(
-                    "whitespace-nowrap transition-opacity duration-300",
-                    collapsed ? "lg:w-0 lg:overflow-hidden lg:opacity-0" : "lg:w-auto lg:opacity-100"
+                    "whitespace-nowrap transition-all duration-300 ease-in-out",
+                    collapsed ? "lg:w-0 lg:opacity-0" : "lg:w-auto lg:opacity-100"
                   )}>{item.label}</span>
                 </Link>
               )
@@ -248,23 +248,21 @@ export function Sidebar({ mobileOpen, setMobileOpen, collapsed, setCollapsed }: 
         </nav>
 
         {/* Footer - pinned to bottom */}
-        <div className="mt-auto shrink-0 border-t border-border">
-          {/* Theme toggle for mobile - above version info */}
-          <div className={cn(
-            "border-b border-border p-3 lg:hidden",
-          )}>
+        <div className="mt-auto shrink-0 overflow-hidden border-t border-border">
+          {/* Theme toggle for mobile */}
+          <div className="border-b border-border p-3 lg:hidden">
             <SidebarThemeToggle showLabel={true} />
           </div>
           
           {/* Collapse toggle for desktop */}
-          <div className="hidden overflow-hidden border-b border-border p-2 lg:block">
+          <div className="hidden overflow-hidden p-2 lg:block">
             <Button
               variant="ghost"
               size={collapsed ? "icon" : "sm"}
               onClick={() => setCollapsed(!collapsed)}
               aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
               className={cn(
-                "w-full text-muted-foreground hover:bg-muted hover:text-foreground",
+                "w-full overflow-hidden text-muted-foreground transition-all duration-300 ease-in-out hover:bg-muted hover:text-foreground",
                 collapsed ? "h-10 justify-center" : "justify-start gap-3"
               )}
             >
@@ -279,33 +277,40 @@ export function Sidebar({ mobileOpen, setMobileOpen, collapsed, setCollapsed }: 
             </Button>
           </div>
 
-          {/* Version info - always at bottom */}
+          {/* Version info - always at very bottom */}
           <div className={cn(
-            "overflow-hidden p-3 transition-all duration-300",
+            "overflow-hidden border-t border-border p-3 transition-all duration-300 ease-in-out",
             collapsed && "lg:p-2"
           )}>
             <div className={cn(
-              "overflow-hidden rounded-lg bg-muted/50 p-3 transition-all duration-300",
-              collapsed && "lg:p-2 lg:text-center"
+              "overflow-hidden rounded-lg bg-muted/50 transition-all duration-300 ease-in-out",
+              collapsed ? "lg:p-2" : "p-3"
             )}>
-              <p className={cn(
-                "whitespace-nowrap text-xs font-medium text-foreground transition-opacity duration-300",
-                collapsed ? "lg:h-0 lg:opacity-0" : "lg:h-auto lg:opacity-100"
-              )}>
-                PG Rent Manager
-              </p>
-              <p className={cn(
-                "whitespace-nowrap text-xs text-muted-foreground transition-all duration-300",
-                collapsed ? "lg:mt-0" : "mt-0.5"
-              )}>
-                {collapsed ? (
-                  <span className="hidden lg:inline">v1.0</span>
-                ) : null}
-                <span className={cn(
-                  "transition-opacity duration-300",
-                  collapsed ? "lg:h-0 lg:w-0 lg:opacity-0" : "lg:h-auto lg:w-auto lg:opacity-100"
-                )}>Version 1.0.0</span>
-              </p>
+              {collapsed ? (
+                <p className="hidden text-center text-xs text-muted-foreground lg:block">v1.0</p>
+              ) : (
+                <>
+                  <p className="whitespace-nowrap text-xs font-medium text-foreground">
+                    PG Rent Manager
+                  </p>
+                  <p className="mt-0.5 whitespace-nowrap text-xs text-muted-foreground">
+                    Version 1.0.0
+                  </p>
+                </>
+              )}
+              {/* Mobile always shows full text */}
+              <div className="lg:hidden">
+                {collapsed && (
+                  <>
+                    <p className="whitespace-nowrap text-xs font-medium text-foreground">
+                      PG Rent Manager
+                    </p>
+                    <p className="mt-0.5 whitespace-nowrap text-xs text-muted-foreground">
+                      Version 1.0.0
+                    </p>
+                  </>
+                )}
+              </div>
             </div>
           </div>
         </div>

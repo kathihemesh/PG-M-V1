@@ -1,7 +1,6 @@
 "use client"
 
-import { Search, Bell } from "lucide-react"
-import { Input } from "@/components/ui/input"
+import { Bell } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
@@ -14,7 +13,6 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { MobileMenuButton } from "./sidebar"
 import { ThemeToggle } from "@/components/theme-toggle"
-import { useId } from "react"
 
 interface HeaderProps {
   title: string
@@ -23,7 +21,6 @@ interface HeaderProps {
 }
 
 export function Header({ title, onMenuClick, isMobileMenuOpen }: HeaderProps) {
-  const searchId = useId()
   const notificationCount = 3
 
   return (
@@ -40,32 +37,6 @@ export function Header({ title, onMenuClick, isMobileMenuOpen }: HeaderProps) {
         </div>
 
         <div className="flex items-center gap-2 sm:gap-3" role="toolbar" aria-label="Header actions">
-          {/* Search - Desktop only */}
-          <div className="relative hidden md:block">
-            <label htmlFor={searchId} className="sr-only">Search</label>
-            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground pointer-events-none" aria-hidden="true" />
-            <Input
-              id={searchId}
-              type="search"
-              placeholder="Search tenants, rooms..."
-              className="w-48 bg-muted/50 pl-9 focus:bg-background lg:w-64"
-              aria-describedby={`${searchId}-hint`}
-            />
-            <span id={`${searchId}-hint`} className="sr-only">
-              Search for tenants, rooms, or payments
-            </span>
-          </div>
-
-          {/* Search - Mobile */}
-          <Button 
-            variant="ghost" 
-            size="icon" 
-            className="md:hidden"
-            aria-label="Open search"
-          >
-            <Search className="h-5 w-5" aria-hidden="true" />
-          </Button>
-
           {/* Theme Toggle - Desktop only */}
           <div className="hidden sm:block">
             <ThemeToggle />
