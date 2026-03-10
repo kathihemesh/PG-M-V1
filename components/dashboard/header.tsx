@@ -36,7 +36,7 @@ export function Header({ title, onMenuClick, isMobileMenuOpen }: HeaderProps) {
           </h1>
         </div>
 
-        <div className="flex items-center gap-2 sm:gap-3" role="toolbar" aria-label="Header actions">
+        <div className="flex items-center gap-1 sm:gap-3" role="toolbar" aria-label="Header actions">
           {/* Theme Toggle - Desktop only */}
           <div className="hidden sm:block">
             <ThemeToggle />
