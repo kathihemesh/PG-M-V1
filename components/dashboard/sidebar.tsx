@@ -157,18 +157,18 @@ export function Sidebar({ mobileOpen, setMobileOpen, collapsed, setCollapsed }: 
         aria-label="Main navigation"
         aria-hidden={!mobileOpen}
         className={cn(
-          "fixed inset-y-0 left-0 z-50 flex flex-col border-r border-border bg-card shadow-xl transition-all duration-300 ease-in-out lg:z-40 lg:translate-x-0 lg:shadow-none lg:aria-[hidden=true]:block",
+          "fixed inset-y-0 left-0 z-50 flex flex-col overflow-hidden border-r border-border bg-card shadow-xl transition-all duration-300 ease-in-out lg:z-40 lg:translate-x-0 lg:shadow-none lg:aria-[hidden=true]:block",
           mobileOpen ? "translate-x-0" : "-translate-x-full",
           collapsed ? "lg:w-[72px]" : "lg:w-64",
           "w-[280px]"
         )}
       >
         {/* Logo */}
-        <div className="flex h-16 shrink-0 items-center justify-between border-b border-border px-4">
+        <div className="flex h-16 shrink-0 items-center justify-between border-b border-border px-4 overflow-hidden">
           <Link 
             href="/" 
             className={cn(
-              "flex items-center gap-3 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+              "flex items-center gap-3 overflow-hidden rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
               collapsed && "lg:justify-center"
             )}
             aria-label="PG Manager - Go to dashboard"
@@ -177,8 +177,8 @@ export function Sidebar({ mobileOpen, setMobileOpen, collapsed, setCollapsed }: 
               <Building2 className="h-5 w-5 text-primary-foreground" />
             </div>
             <span className={cn(
-              "text-lg font-semibold tracking-tight text-foreground transition-opacity duration-200",
-              collapsed && "lg:hidden"
+              "whitespace-nowrap text-lg font-semibold tracking-tight text-foreground transition-opacity duration-300",
+              collapsed ? "lg:w-0 lg:opacity-0" : "lg:w-auto lg:opacity-100"
             )}>
               PG Manager
             </span>
@@ -214,7 +214,10 @@ export function Sidebar({ mobileOpen, setMobileOpen, collapsed, setCollapsed }: 
                   )}
                 >
                   <item.icon className="h-5 w-5 shrink-0" aria-hidden="true" />
-                  <span className={cn(collapsed && "lg:hidden")}>{item.label}</span>
+                  <span className={cn(
+                    "whitespace-nowrap transition-opacity duration-300",
+                    collapsed ? "lg:w-0 lg:overflow-hidden lg:opacity-0" : "lg:w-auto lg:opacity-100"
+                  )}>{item.label}</span>
                 </Link>
               )
               
@@ -254,61 +257,54 @@ export function Sidebar({ mobileOpen, setMobileOpen, collapsed, setCollapsed }: 
           </div>
           
           {/* Collapse toggle for desktop */}
-          <div className="hidden border-b border-border p-2 lg:block">
-            {collapsed ? (
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => setCollapsed(false)}
-                    aria-label="Expand sidebar"
-                    className="h-10 w-full text-muted-foreground hover:bg-muted hover:text-foreground"
-                  >
-                    <ChevronRight className="h-5 w-5" aria-hidden="true" />
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent side="right">
-                  Expand sidebar
-                </TooltipContent>
-              </Tooltip>
-            ) : (
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setCollapsed(true)}
-                aria-label="Collapse sidebar"
-                className="w-full justify-start gap-3 text-muted-foreground hover:bg-muted hover:text-foreground"
-              >
-                <ChevronLeft className="h-5 w-5" aria-hidden="true" />
-                <span>Collapse</span>
-              </Button>
-            )}
+          <div className="hidden overflow-hidden border-b border-border p-2 lg:block">
+            <Button
+              variant="ghost"
+              size={collapsed ? "icon" : "sm"}
+              onClick={() => setCollapsed(!collapsed)}
+              aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+              className={cn(
+                "w-full text-muted-foreground hover:bg-muted hover:text-foreground",
+                collapsed ? "h-10 justify-center" : "justify-start gap-3"
+              )}
+            >
+              {collapsed ? (
+                <ChevronRight className="h-5 w-5 shrink-0" aria-hidden="true" />
+              ) : (
+                <>
+                  <ChevronLeft className="h-5 w-5 shrink-0" aria-hidden="true" />
+                  <span className="whitespace-nowrap">Collapse</span>
+                </>
+              )}
+            </Button>
           </div>
 
           {/* Version info - always at bottom */}
           <div className={cn(
-            "p-3",
+            "overflow-hidden p-3 transition-all duration-300",
             collapsed && "lg:p-2"
           )}>
             <div className={cn(
-              "rounded-lg bg-muted/50 p-3",
+              "overflow-hidden rounded-lg bg-muted/50 p-3 transition-all duration-300",
               collapsed && "lg:p-2 lg:text-center"
             )}>
               <p className={cn(
-                "text-xs font-medium text-foreground",
-                collapsed && "lg:hidden"
+                "whitespace-nowrap text-xs font-medium text-foreground transition-opacity duration-300",
+                collapsed ? "lg:h-0 lg:opacity-0" : "lg:h-auto lg:opacity-100"
               )}>
                 PG Rent Manager
               </p>
               <p className={cn(
-                "mt-0.5 text-xs text-muted-foreground",
-                collapsed && "lg:mt-0"
+                "whitespace-nowrap text-xs text-muted-foreground transition-all duration-300",
+                collapsed ? "lg:mt-0" : "mt-0.5"
               )}>
                 {collapsed ? (
                   <span className="hidden lg:inline">v1.0</span>
                 ) : null}
-                <span className={cn(collapsed && "lg:hidden")}>Version 1.0.0</span>
+                <span className={cn(
+                  "transition-opacity duration-300",
+                  collapsed ? "lg:h-0 lg:w-0 lg:opacity-0" : "lg:h-auto lg:w-auto lg:opacity-100"
+                )}>Version 1.0.0</span>
               </p>
             </div>
           </div>
@@ -340,37 +336,4 @@ export function MobileMenuButton({
   )
 }
 
-export function SidebarToggleButton({
-  collapsed,
-  onClick,
-}: {
-  collapsed: boolean
-  onClick: () => void
-}) {
-  return (
-    <TooltipProvider delayDuration={0}>
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="hidden shrink-0 lg:flex focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-            onClick={onClick}
-            aria-expanded={!collapsed}
-            aria-controls="main-sidebar"
-            aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
-          >
-            {collapsed ? (
-              <ChevronRight className="h-5 w-5" aria-hidden="true" />
-            ) : (
-              <ChevronLeft className="h-5 w-5" aria-hidden="true" />
-            )}
-          </Button>
-        </TooltipTrigger>
-        <TooltipContent side="right">
-          {collapsed ? "Expand sidebar" : "Collapse sidebar"}
-        </TooltipContent>
-      </Tooltip>
-    </TooltipProvider>
-  )
-}
+

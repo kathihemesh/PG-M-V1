@@ -30,10 +30,6 @@ export function DashboardLayout({ children, title }: DashboardLayoutProps) {
     setMobileOpen((prev) => !prev)
   }, [])
 
-  const handleSidebarToggle = useCallback(() => {
-    handleCollapsedChange(!collapsed)
-  }, [collapsed, handleCollapsedChange])
-
   return (
     <div className="min-h-screen overflow-x-hidden bg-background">
       {/* Skip to main content link for keyboard users */}
@@ -56,8 +52,6 @@ export function DashboardLayout({ children, title }: DashboardLayoutProps) {
           title={title}
           onMenuClick={handleMenuToggle}
           isMobileMenuOpen={mobileOpen}
-          collapsed={collapsed}
-          onSidebarToggle={handleSidebarToggle}
         />
         <main 
           id="main-content"

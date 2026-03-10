@@ -1,6 +1,6 @@
 "use client"
 
-import { Search, Bell, ChevronLeft, ChevronRight } from "lucide-react"
+import { Search, Bell } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -15,22 +15,14 @@ import {
 import { MobileMenuButton } from "./sidebar"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { useId } from "react"
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip"
 
 interface HeaderProps {
   title: string
   onMenuClick: () => void
   isMobileMenuOpen: boolean
-  collapsed?: boolean
-  onSidebarToggle?: () => void
 }
 
-export function Header({ title, onMenuClick, isMobileMenuOpen, collapsed, onSidebarToggle }: HeaderProps) {
+export function Header({ title, onMenuClick, isMobileMenuOpen }: HeaderProps) {
   const searchId = useId()
   const notificationCount = 3
 
@@ -42,33 +34,6 @@ export function Header({ title, onMenuClick, isMobileMenuOpen, collapsed, onSide
       <div className="flex h-16 items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
         <div className="flex items-center gap-2 lg:gap-3">
           <MobileMenuButton onClick={onMenuClick} isOpen={isMobileMenuOpen} />
-          
-          {/* Sidebar Toggle - Desktop only */}
-          {onSidebarToggle && (
-            <TooltipProvider delayDuration={0}>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="hidden shrink-0 lg:flex"
-                    onClick={onSidebarToggle}
-                    aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
-                  >
-                    {collapsed ? (
-                      <ChevronRight className="h-5 w-5" aria-hidden="true" />
-                    ) : (
-                      <ChevronLeft className="h-5 w-5" aria-hidden="true" />
-                    )}
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent side="right">
-                  {collapsed ? "Expand sidebar" : "Collapse sidebar"}
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-          )}
-          
           <h1 className="text-lg font-semibold tracking-tight text-foreground sm:text-xl lg:text-2xl">
             {title}
           </h1>
@@ -107,7 +72,7 @@ export function Header({ title, onMenuClick, isMobileMenuOpen, collapsed, onSide
           </div>
 
           {/* Notifications */}
-          <DropdownMenu>
+          <DropdownMenu modal={false}>
             <DropdownMenuTrigger asChild>
               <Button 
                 variant="ghost" 
@@ -126,7 +91,7 @@ export function Header({ title, onMenuClick, isMobileMenuOpen, collapsed, onSide
                 )}
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-80">
+            <DropdownMenuContent align="end" className="w-80" sideOffset={8}>
               <DropdownMenuLabel>Notifications</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem className="flex flex-col items-start gap-1 py-3">
@@ -149,7 +114,7 @@ export function Header({ title, onMenuClick, isMobileMenuOpen, collapsed, onSide
           </DropdownMenu>
 
           {/* Profile */}
-          <DropdownMenu>
+          <DropdownMenu modal={false}>
             <DropdownMenuTrigger asChild>
               <Button 
                 variant="ghost" 
@@ -164,7 +129,7 @@ export function Header({ title, onMenuClick, isMobileMenuOpen, collapsed, onSide
                 </Avatar>
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-56">
+            <DropdownMenuContent align="end" className="w-56" sideOffset={8}>
               <DropdownMenuLabel>
                 <div className="flex flex-col gap-1">
                   <p className="text-sm font-medium">Admin User</p>
