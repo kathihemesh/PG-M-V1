@@ -110,11 +110,23 @@ function SidebarThemeToggle({ showLabel = true }: { showLabel?: boolean }) {
 export function Sidebar({ mobileOpen, setMobileOpen, collapsed, setCollapsed }: SidebarProps) {
   const pathname = usePathname()
   const navId = useId()
+  const [isAnimating, setIsAnimating] = useState(false)
 
-  // Close sidebar on route change
+  // Close mobile sidebar on route change (only affects mobile)
   useEffect(() => {
-    setMobileOpen(false)
-  }, [pathname, setMobileOpen])
+    // Only close mobile menu, don't affect desktop collapsed state
+    if (mobileOpen) {
+      setMobileOpen(false)
+    }
+  }, [pathname]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Handle collapse toggle with animation flag
+  const handleCollapseToggle = () => {
+    setIsAnimating(true)
+    setCollapsed(!collapsed)
+    // Reset animation flag after transition completes
+    setTimeout(() => setIsAnimating(false), 200)
+  }
 
   // Handle escape key to close mobile menu
   useEffect(() => {
@@ -158,7 +170,9 @@ export function Sidebar({ mobileOpen, setMobileOpen, collapsed, setCollapsed }: 
         aria-hidden={!mobileOpen}
         className={cn(
           "fixed inset-y-0 left-0 z-50 flex flex-col overflow-hidden border-r border-border bg-card shadow-xl lg:z-40 lg:translate-x-0 lg:shadow-none lg:aria-[hidden=true]:block",
-          "transition-transform duration-300 ease-in-out lg:transition-[width] lg:duration-200",
+          "transition-transform duration-300 ease-in-out",
+          // Only animate width when explicitly toggling collapse
+          isAnimating && "lg:transition-[width] lg:duration-200",
           mobileOpen ? "translate-x-0" : "-translate-x-full",
           collapsed ? "lg:w-[72px]" : "lg:w-64",
           "w-[280px]"
@@ -260,7 +274,7 @@ export function Sidebar({ mobileOpen, setMobileOpen, collapsed, setCollapsed }: 
             <Button
               variant="ghost"
               size={collapsed ? "icon" : "sm"}
-              onClick={() => setCollapsed(!collapsed)}
+              onClick={handleCollapseToggle}
               aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
               className={cn(
                 "w-full overflow-hidden text-muted-foreground transition-colors hover:bg-muted hover:text-foreground",

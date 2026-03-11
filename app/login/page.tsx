@@ -66,9 +66,9 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="relative flex min-h-screen flex-col bg-gradient-to-br from-background via-background to-muted/30">
+    <div className="relative flex h-[100dvh] flex-col overflow-hidden bg-gradient-to-br from-background via-background to-muted/30">
       {/* Header */}
-      <header className="flex items-center justify-between px-4 py-4 sm:px-6 md:px-8">
+      <header className="flex shrink-0 items-center justify-between px-4 py-3 sm:px-6 sm:py-4 md:px-8">
         <Link 
           href="/login" 
           className="flex items-center gap-2 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
@@ -82,21 +82,21 @@ export default function LoginPage() {
       </header>
 
       {/* Main Content */}
-      <main className="flex flex-1 items-center justify-center px-4 py-6 sm:px-6 sm:py-8">
+      <main className="flex flex-1 items-center justify-center overflow-y-auto px-4 py-2 sm:px-6 sm:py-4">
         <Card className="w-full max-w-[420px] border-border/50 shadow-lg">
-          <CardHeader className="space-y-1 px-4 pt-6 text-center sm:px-6">
-            <div className="mx-auto mb-2 flex h-10 w-10 items-center justify-center rounded-xl bg-primary sm:h-12 sm:w-12">
-              <Building2 className="h-5 w-5 text-primary-foreground sm:h-6 sm:w-6" />
+          <CardHeader className="space-y-1 px-4 pb-2 pt-4 text-center sm:px-6 sm:pb-3 sm:pt-5">
+            <div className="mx-auto mb-1 flex h-9 w-9 items-center justify-center rounded-xl bg-primary sm:mb-2 sm:h-11 sm:w-11">
+              <Building2 className="h-4 w-4 text-primary-foreground sm:h-5 sm:w-5" />
             </div>
-            <CardTitle className="text-xl font-bold tracking-tight sm:text-2xl">
+            <CardTitle className="text-lg font-bold tracking-tight sm:text-xl">
               Welcome Back
             </CardTitle>
-            <CardDescription className="text-balance text-sm text-muted-foreground">
+            <CardDescription className="text-balance text-xs text-muted-foreground sm:text-sm">
               Sign in to manage your PG tenants, rooms, and rent payments.
             </CardDescription>
           </CardHeader>
 
-          <CardContent className="space-y-5 px-4 pb-6 sm:space-y-6 sm:px-6">
+          <CardContent className="space-y-3 px-4 pb-4 sm:space-y-4 sm:px-6 sm:pb-5">
             {/* Error Alert */}
             {error && (
               <div className="flex items-center gap-3 rounded-lg border border-destructive/50 bg-destructive/10 px-4 py-3 text-sm text-destructive animate-in fade-in-0 slide-in-from-top-1 duration-200">
@@ -106,7 +106,7 @@ export default function LoginPage() {
             )}
 
             {/* Form */}
-            <form className="space-y-4" onSubmit={handleSubmit}>
+            <form className="space-y-3 sm:space-y-4" onSubmit={handleSubmit}>
               {/* Email Field */}
               <div className="space-y-2">
                 <Label htmlFor="email">Email</Label>
@@ -115,7 +115,7 @@ export default function LoginPage() {
                   type="email"
                   placeholder="Enter your email"
                   autoComplete="email"
-                  className={`h-11 ${validationError.email ? "border-destructive" : ""}`}
+                  className={`h-10 sm:h-11 ${validationError.email ? "border-destructive" : ""}`}
                   value={email}
                   onChange={(e) => {
                     setEmail(e.target.value)
@@ -140,7 +140,7 @@ export default function LoginPage() {
                     type={showPassword ? "text" : "password"}
                     placeholder="Enter your password"
                     autoComplete="current-password"
-                    className={`h-11 pr-10 ${validationError.password ? "border-destructive" : ""}`}
+                    className={`h-10 pr-10 sm:h-11 ${validationError.password ? "border-destructive" : ""}`}
                     value={password}
                     onChange={(e) => {
                       setPassword(e.target.value)
@@ -180,7 +180,7 @@ export default function LoginPage() {
               {/* Sign In Button */}
               <Button 
                 type="submit" 
-                className="h-11 w-full font-medium transition-all duration-200 hover:shadow-md active:scale-[0.98]"
+                className="h-10 w-full font-medium transition-all duration-200 hover:shadow-md active:scale-[0.98] sm:h-11"
                 disabled={isSubmitting}
               >
                 {isSubmitting ? (
