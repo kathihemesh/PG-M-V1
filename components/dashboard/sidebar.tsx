@@ -157,7 +157,8 @@ export function Sidebar({ mobileOpen, setMobileOpen, collapsed, setCollapsed }: 
         aria-label="Main navigation"
         aria-hidden={!mobileOpen}
         className={cn(
-          "fixed inset-y-0 left-0 z-50 flex flex-col overflow-hidden border-r border-border bg-card shadow-xl transition-all duration-300 ease-in-out lg:z-40 lg:translate-x-0 lg:shadow-none lg:aria-[hidden=true]:block",
+          "fixed inset-y-0 left-0 z-50 flex flex-col overflow-hidden border-r border-border bg-card shadow-xl lg:z-40 lg:translate-x-0 lg:shadow-none lg:aria-[hidden=true]:block",
+          "transition-transform duration-300 ease-in-out lg:transition-[width] lg:duration-200",
           mobileOpen ? "translate-x-0" : "-translate-x-full",
           collapsed ? "lg:w-[72px]" : "lg:w-64",
           "w-[280px]"
@@ -279,11 +280,11 @@ export function Sidebar({ mobileOpen, setMobileOpen, collapsed, setCollapsed }: 
 
           {/* Version info - always at very bottom */}
           <div className={cn(
-            "overflow-hidden border-t border-border p-3 transition-all duration-300 ease-in-out",
+            "overflow-hidden border-t border-border p-3",
             collapsed && "lg:p-2"
           )}>
             <div className={cn(
-              "overflow-hidden rounded-lg bg-muted/50 transition-all duration-300 ease-in-out",
+              "overflow-hidden rounded-lg bg-muted/50",
               collapsed ? "lg:p-2" : "p-3"
             )}>
               {collapsed ? (
