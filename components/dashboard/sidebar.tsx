@@ -29,7 +29,7 @@ import {
 } from "@/components/ui/tooltip"
 
 const navItems = [
-  { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard, description: "Overview and statistics" },
+  { href: "/", label: "Dashboard", icon: LayoutDashboard, description: "Overview and statistics" },
   { href: "/tenants", label: "Tenants", icon: Users, description: "Manage tenant information" },
   { href: "/rooms", label: "Rooms", icon: DoorOpen, description: "Room inventory and status" },
   { href: "/payments", label: "Payments", icon: CreditCard, description: "Track rent payments" },
@@ -111,12 +111,9 @@ export function Sidebar({ mobileOpen, setMobileOpen, collapsed, setCollapsed }: 
   const pathname = usePathname()
   const navId = useId()
 
-  // Close mobile sidebar on route change (only on mobile, not desktop)
+  // Close sidebar on route change
   useEffect(() => {
-    // Only close on mobile - don't affect collapsed state
-    if (window.innerWidth < 1024) {
-      setMobileOpen(false)
-    }
+    setMobileOpen(false)
   }, [pathname, setMobileOpen])
 
   // Handle escape key to close mobile menu
@@ -169,7 +166,7 @@ export function Sidebar({ mobileOpen, setMobileOpen, collapsed, setCollapsed }: 
         {/* Logo */}
         <div className="flex h-16 shrink-0 items-center justify-between overflow-hidden border-b border-border px-4">
           <Link 
-            href="/dashboard" 
+            href="/" 
             className={cn(
               "flex items-center gap-3 overflow-hidden rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
               collapsed && "lg:justify-center"
@@ -202,7 +199,7 @@ export function Sidebar({ mobileOpen, setMobileOpen, collapsed, setCollapsed }: 
           <h2 id={`${navId}-label`} className="sr-only">Main navigation</h2>
           <ul className="flex flex-col gap-1" role="list">
             {navItems.map((item) => {
-              const isActive = pathname === item.href || (item.href === "/dashboard" && pathname === "/")
+              const isActive = pathname === item.href
               const linkContent = (
                 <Link
                   href={item.href}

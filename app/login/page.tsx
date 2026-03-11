@@ -46,7 +46,7 @@ export default function LoginPage() {
     const result = await login(email, password)
     
     if (!result.success) {
-      setError(result.error || "Invalid email or password.")
+      setError(result.error || "Invalid email or password. Please try again.")
       setIsSubmitting(false)
     }
     // If success, the auth provider will redirect to dashboard
