@@ -1,13 +1,12 @@
 "use client"
 
-import { useAuth } from "@/components/auth-provider"
 import { DashboardLayout } from "@/components/dashboard/dashboard-layout"
 import { StatsCard } from "@/components/dashboard/stats-card"
 import { RentCollectionChart } from "@/components/dashboard/rent-collection-chart"
 import { PaymentStatusChart } from "@/components/dashboard/payment-status-chart"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Users, IndianRupee, Clock, AlertTriangle, Loader2 } from "lucide-react"
+import { Users, IndianRupee, Clock, AlertTriangle } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 const recentActivity = [
@@ -42,32 +41,6 @@ const recentActivity = [
 ]
 
 export default function DashboardPage() {
-  const { isLoading, isAuthenticated } = useAuth()
-
-  // Show loading state while checking authentication
-  if (isLoading) {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-background">
-        <div className="flex flex-col items-center gap-3">
-          <Loader2 className="h-8 w-8 animate-spin text-primary" />
-          <p className="text-sm text-muted-foreground">Loading...</p>
-        </div>
-      </div>
-    )
-  }
-
-  // Don't render dashboard content if not authenticated (will redirect)
-  if (!isAuthenticated) {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-background">
-        <div className="flex flex-col items-center gap-3">
-          <Loader2 className="h-8 w-8 animate-spin text-primary" />
-          <p className="text-sm text-muted-foreground">Redirecting to login...</p>
-        </div>
-      </div>
-    )
-  }
-
   return (
     <DashboardLayout title="Dashboard">
       {/* Stats Cards */}

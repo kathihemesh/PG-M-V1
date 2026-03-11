@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { supabase } from "@/lib/supabaseClient"
+import { createClient } from "@/lib/supabase/client"
 
 export default function ResetPasswordPage() {
   const router = useRouter()
@@ -26,6 +26,8 @@ export default function ResetPasswordPage() {
   // Check if the reset token is valid on mount
   useEffect(() => {
     const checkResetToken = async () => {
+      const supabase = createClient()
+      
       try {
         // Get the session - Supabase automatically handles the recovery token from the URL
         const { data: { session }, error: sessionError } = await supabase.auth.getSession()
@@ -117,6 +119,7 @@ export default function ResetPasswordPage() {
     setIsSubmitting(true)
 
     try {
+      const supabase = createClient()
       const { error: updateError } = await supabase.auth.updateUser({
         password: password,
       })
