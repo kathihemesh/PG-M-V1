@@ -14,21 +14,39 @@ export default function LoginPage() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [error, setError] = useState<string | null>(null)
+  const [validationError, setValidationError] = useState<{ email?: string; password?: string }>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
   const { login, isLoading } = useAuth()
+
+  const validateForm = () => {
+    const errors: { email?: string; password?: string } = {}
+    
+    if (!email.trim()) {
+      errors.email = "Email is required"
+    }
+    
+    if (!password.trim()) {
+      errors.password = "Password is required"
+    }
+    
+    setValidationError(errors)
+    return Object.keys(errors).length === 0
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError(null)
+    
+    if (!validateForm()) {
+      return
+    }
+    
     setIsSubmitting(true)
 
-    // Simulate a small delay for better UX
-    await new Promise(resolve => setTimeout(resolve, 500))
-
-    const result = login(email, password)
+    const result = await login(email, password)
     
     if (!result.success) {
-      setError(result.error || "Invalid credentials. Please try again.")
+      setError(result.error || "Invalid email or password. Please try again.")
       setIsSubmitting(false)
     }
     // If success, the auth provider will redirect to dashboard
@@ -93,17 +111,22 @@ export default function LoginPage() {
                 <Input
                   id="email"
                   type="email"
-                  placeholder="admin@gmail.com"
+                  placeholder="Enter your email"
                   autoComplete="email"
-                  className="h-11"
+                  className={`h-11 ${validationError.email ? "border-destructive" : ""}`}
                   value={email}
                   onChange={(e) => {
                     setEmail(e.target.value)
                     setError(null)
+                    setValidationError((prev) => ({ ...prev, email: undefined }))
                   }}
-                  required
-                  aria-describedby={error ? "login-error" : undefined}
+                  aria-describedby={validationError.email ? "email-error" : undefined}
                 />
+                {validationError.email && (
+                  <p id="email-error" className="text-sm text-destructive">
+                    {validationError.email}
+                  </p>
+                )}
               </div>
 
               {/* Password Field */}
@@ -115,14 +138,14 @@ export default function LoginPage() {
                     type={showPassword ? "text" : "password"}
                     placeholder="Enter your password"
                     autoComplete="current-password"
-                    className="h-11 pr-10"
+                    className={`h-11 pr-10 ${validationError.password ? "border-destructive" : ""}`}
                     value={password}
                     onChange={(e) => {
                       setPassword(e.target.value)
                       setError(null)
+                      setValidationError((prev) => ({ ...prev, password: undefined }))
                     }}
-                    required
-                    aria-describedby={error ? "login-error" : undefined}
+                    aria-describedby={validationError.password ? "password-error" : undefined}
                   />
                   <button
                     type="button"
@@ -137,6 +160,11 @@ export default function LoginPage() {
                     )}
                   </button>
                 </div>
+                {validationError.password && (
+                  <p id="password-error" className="text-sm text-destructive">
+                    {validationError.password}
+                  </p>
+                )}
               </div>
 
               {/* Sign In Button */}
@@ -155,15 +183,6 @@ export default function LoginPage() {
                 )}
               </Button>
             </form>
-
-            {/* Demo Credentials Hint */}
-            <div className="rounded-lg border border-border/50 bg-muted/50 px-4 py-3">
-              <p className="text-center text-xs text-muted-foreground">
-                <span className="font-medium text-foreground">Demo credentials:</span>
-                <br />
-                Email: admin@gmail.com | Password: admin@123
-              </p>
-            </div>
 
             {/* Footer Text */}
             <p className="text-center text-sm text-muted-foreground">
