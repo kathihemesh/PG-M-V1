@@ -1,7 +1,6 @@
 "use client"
 
-import { Search, Bell } from "lucide-react"
-import { Input } from "@/components/ui/input"
+import { Bell } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
@@ -14,7 +13,6 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { MobileMenuButton } from "./sidebar"
 import { ThemeToggle } from "@/components/theme-toggle"
-import { useId } from "react"
 
 interface HeaderProps {
   title: string
@@ -23,7 +21,6 @@ interface HeaderProps {
 }
 
 export function Header({ title, onMenuClick, isMobileMenuOpen }: HeaderProps) {
-  const searchId = useId()
   const notificationCount = 3
 
   return (
@@ -32,45 +29,21 @@ export function Header({ title, onMenuClick, isMobileMenuOpen }: HeaderProps) {
       className="sticky top-0 z-30 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80"
     >
       <div className="flex h-16 items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 lg:gap-3">
           <MobileMenuButton onClick={onMenuClick} isOpen={isMobileMenuOpen} />
           <h1 className="text-lg font-semibold tracking-tight text-foreground sm:text-xl lg:text-2xl">
             {title}
           </h1>
         </div>
 
-        <div className="flex items-center gap-2 sm:gap-3" role="toolbar" aria-label="Header actions">
-          {/* Search - Desktop only */}
-          <div className="relative hidden md:block">
-            <label htmlFor={searchId} className="sr-only">Search</label>
-            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground pointer-events-none" aria-hidden="true" />
-            <Input
-              id={searchId}
-              type="search"
-              placeholder="Search tenants, rooms..."
-              className="w-48 bg-muted/50 pl-9 focus:bg-background lg:w-64"
-              aria-describedby={`${searchId}-hint`}
-            />
-            <span id={`${searchId}-hint`} className="sr-only">
-              Search for tenants, rooms, or payments
-            </span>
+        <div className="flex items-center gap-1 sm:gap-3" role="toolbar" aria-label="Header actions">
+          {/* Theme Toggle - Desktop only */}
+          <div className="hidden sm:block">
+            <ThemeToggle />
           </div>
 
-          {/* Search - Mobile */}
-          <Button 
-            variant="ghost" 
-            size="icon" 
-            className="md:hidden"
-            aria-label="Open search"
-          >
-            <Search className="h-5 w-5" aria-hidden="true" />
-          </Button>
-
-          {/* Theme Toggle */}
-          <ThemeToggle />
-
           {/* Notifications */}
-          <DropdownMenu>
+          <DropdownMenu modal={false}>
             <DropdownMenuTrigger asChild>
               <Button 
                 variant="ghost" 
@@ -81,7 +54,7 @@ export function Header({ title, onMenuClick, isMobileMenuOpen }: HeaderProps) {
                 <Bell className="h-5 w-5" aria-hidden="true" />
                 {notificationCount > 0 && (
                   <span 
-                    className="absolute right-1 top-1 flex h-4 w-4 items-center justify-center rounded-full bg-destructive text-[10px] font-semibold text-white"
+                    className="absolute right-1 top-1 flex h-4 w-4 items-center justify-center rounded-full bg-destructive text-[10px] font-semibold text-destructive-foreground"
                     aria-hidden="true"
                   >
                     {notificationCount}
@@ -89,7 +62,7 @@ export function Header({ title, onMenuClick, isMobileMenuOpen }: HeaderProps) {
                 )}
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-80">
+            <DropdownMenuContent align="end" className="w-80" sideOffset={8}>
               <DropdownMenuLabel>Notifications</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem className="flex flex-col items-start gap-1 py-3">
@@ -112,7 +85,7 @@ export function Header({ title, onMenuClick, isMobileMenuOpen }: HeaderProps) {
           </DropdownMenu>
 
           {/* Profile */}
-          <DropdownMenu>
+          <DropdownMenu modal={false}>
             <DropdownMenuTrigger asChild>
               <Button 
                 variant="ghost" 
@@ -127,7 +100,7 @@ export function Header({ title, onMenuClick, isMobileMenuOpen }: HeaderProps) {
                 </Avatar>
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-56">
+            <DropdownMenuContent align="end" className="w-56" sideOffset={8}>
               <DropdownMenuLabel>
                 <div className="flex flex-col gap-1">
                   <p className="text-sm font-medium">Admin User</p>
