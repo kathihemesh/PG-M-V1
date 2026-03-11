@@ -93,7 +93,7 @@ export default function ForgotPasswordPage() {
                 Check Your Email
               </CardTitle>
               <CardDescription className="text-balance text-muted-foreground">
-                Password reset link sent. Please check your email.
+                Reset link sent to your email.
               </CardDescription>
             </CardHeader>
 

@@ -74,7 +74,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       router.push("/login")
     } else if (isAuthenticated && pathname === "/login") {
       // Redirect to dashboard if already authenticated and on login page
-      router.push("/")
+      router.push("/dashboard")
     }
   }, [isAuthenticated, isLoading, pathname, router])
 
@@ -86,14 +86,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       })
 
       if (error) {
-        return { success: false, error: "Invalid email or password. Please try again." }
+        return { success: false, error: "Invalid email or password." }
       }
 
       if (data.session) {
         setSession(data.session)
         setUser(data.user)
         setIsAuthenticated(true)
-        router.push("/")
+        router.push("/dashboard")
         return { success: true }
       }
 
