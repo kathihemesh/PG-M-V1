@@ -1,6 +1,7 @@
 "use client"
 
-import { Bell } from "lucide-react"
+import { Bell, Loader2 } from "lucide-react"
+import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
@@ -13,6 +14,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { MobileMenuButton } from "./sidebar"
 import { ThemeToggle } from "@/components/theme-toggle"
+import { useAuth } from "@/components/auth-provider"
 
 interface HeaderProps {
   title: string
@@ -21,7 +23,23 @@ interface HeaderProps {
 }
 
 export function Header({ title, onMenuClick, isMobileMenuOpen }: HeaderProps) {
+  const { logout, user } = useAuth()
+  const [isLoggingOut, setIsLoggingOut] = useState(false)
   const notificationCount = 3
+
+  const handleLogout = async () => {
+    setIsLoggingOut(true)
+    await logout()
+    // No need to setIsLoggingOut(false) as we'll be redirected
+  }
+
+  // Get user initials for avatar
+  const getUserInitials = () => {
+    if (user?.email) {
+      return user.email.substring(0, 2).toUpperCase()
+    }
+    return "AD"
+  }
 
   return (
     <header 
@@ -95,7 +113,7 @@ export function Header({ title, onMenuClick, isMobileMenuOpen }: HeaderProps) {
                 <Avatar className="h-9 w-9 ring-2 ring-border">
                   <AvatarImage src="/avatar.jpg" alt="" />
                   <AvatarFallback className="bg-primary text-sm font-medium text-primary-foreground">
-                    AD
+                    {getUserInitials()}
                   </AvatarFallback>
                 </Avatar>
               </Button>
@@ -103,8 +121,8 @@ export function Header({ title, onMenuClick, isMobileMenuOpen }: HeaderProps) {
             <DropdownMenuContent align="end" className="w-56" sideOffset={8}>
               <DropdownMenuLabel>
                 <div className="flex flex-col gap-1">
-                  <p className="text-sm font-medium">Admin User</p>
-                  <p className="text-xs text-muted-foreground">admin@pgmanager.com</p>
+                  <p className="text-sm font-medium">{user?.email?.split("@")[0] || "Admin User"}</p>
+                  <p className="text-xs text-muted-foreground">{user?.email || "admin@pgmanager.com"}</p>
                 </div>
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
@@ -112,8 +130,19 @@ export function Header({ title, onMenuClick, isMobileMenuOpen }: HeaderProps) {
               <DropdownMenuItem>Settings</DropdownMenuItem>
               <DropdownMenuItem>Help & Support</DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem className="text-destructive focus:text-destructive">
-                Log out
+              <DropdownMenuItem 
+                className="text-destructive focus:text-destructive cursor-pointer"
+                onClick={handleLogout}
+                disabled={isLoggingOut}
+              >
+                {isLoggingOut ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Logging out...
+                  </>
+                ) : (
+                  "Log out"
+                )}
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

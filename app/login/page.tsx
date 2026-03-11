@@ -165,6 +165,14 @@ export default function LoginPage() {
                     {validationError.password}
                   </p>
                 )}
+                <div className="flex justify-end">
+                  <Link
+                    href="/forgot-password"
+                    className="text-sm font-medium text-primary hover:text-primary/80 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-sm"
+                  >
+                    Forgot Password?
+                  </Link>
+                </div>
               </div>
 
               {/* Sign In Button */}
