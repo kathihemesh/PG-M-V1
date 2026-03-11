@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useCallback, useEffect, useRef } from "react"
+import { useState, useCallback, useEffect } from "react"
 import { Sidebar } from "./sidebar"
 import { Header } from "./header"
 
@@ -12,8 +12,6 @@ interface DashboardLayoutProps {
 export function DashboardLayout({ children, title }: DashboardLayoutProps) {
   const [mobileOpen, setMobileOpen] = useState(false)
   const [collapsed, setCollapsed] = useState(false)
-  const [isAnimating, setIsAnimating] = useState(false)
-  const initialLoadRef = useRef(true)
 
   // Persist collapsed state in localStorage
   useEffect(() => {
@@ -21,18 +19,9 @@ export function DashboardLayout({ children, title }: DashboardLayoutProps) {
     if (saved !== null) {
       setCollapsed(saved === "true")
     }
-    // Mark initial load as complete after a brief delay
-    setTimeout(() => {
-      initialLoadRef.current = false
-    }, 100)
   }, [])
 
   const handleCollapsedChange = useCallback((value: boolean) => {
-    // Only animate if not initial load
-    if (!initialLoadRef.current) {
-      setIsAnimating(true)
-      setTimeout(() => setIsAnimating(false), 200)
-    }
     setCollapsed(value)
     localStorage.setItem("sidebar-collapsed", String(value))
   }, [])
@@ -58,7 +47,7 @@ export function DashboardLayout({ children, title }: DashboardLayoutProps) {
         setCollapsed={handleCollapsedChange}
       />
       
-      <div className={`flex min-w-0 max-w-full flex-col ${isAnimating ? "transition-[padding] duration-200" : ""} ${collapsed ? "lg:pl-[72px]" : "lg:pl-64"}`}>
+      <div className={`flex min-w-0 max-w-full flex-col transition-all duration-300 ${collapsed ? "lg:pl-[72px]" : "lg:pl-64"}`}>
         <Header
           title={title}
           onMenuClick={handleMenuToggle}
