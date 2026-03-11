@@ -8,7 +8,8 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { supabase } from "@/lib/supabaseClient"
+import { createClient } from "@/lib/supabase/client"
+import { AuthThemeToggle } from "@/components/auth-theme-toggle"
 
 export default function ResetPasswordPage() {
   const router = useRouter()
@@ -26,6 +27,8 @@ export default function ResetPasswordPage() {
   // Check if the reset token is valid on mount
   useEffect(() => {
     const checkResetToken = async () => {
+      const supabase = createClient()
+      
       try {
         // Get the session - Supabase automatically handles the recovery token from the URL
         const { data: { session }, error: sessionError } = await supabase.auth.getSession()
@@ -117,6 +120,7 @@ export default function ResetPasswordPage() {
     setIsSubmitting(true)
 
     try {
+      const supabase = createClient()
       const { error: updateError } = await supabase.auth.updateUser({
         password: password,
       })
@@ -159,7 +163,7 @@ export default function ResetPasswordPage() {
     return (
       <div className="relative flex min-h-screen flex-col bg-gradient-to-br from-background via-background to-muted/30">
         {/* Header */}
-        <header className="flex items-center justify-between px-6 py-4 sm:px-8">
+        <header className="flex items-center justify-between px-4 py-4 sm:px-6 md:px-8">
           <Link 
             href="/login" 
             className="flex items-center gap-2 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
@@ -167,26 +171,27 @@ export default function ResetPasswordPage() {
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
               <Building2 className="h-4 w-4 text-primary-foreground" />
             </div>
-            <span className="text-sm font-semibold text-foreground">PG Rent Manager</span>
+            <span className="hidden text-sm font-semibold text-foreground sm:inline">PG Rent Manager</span>
           </Link>
+          <AuthThemeToggle />
         </header>
 
         {/* Main Content */}
-        <main className="flex flex-1 items-center justify-center px-4 py-8 sm:px-6">
+        <main className="flex flex-1 items-center justify-center px-4 py-6 sm:px-6 sm:py-8">
           <Card className="w-full max-w-[420px] border-border/50 shadow-lg">
-            <CardHeader className="space-y-1 text-center">
-              <div className="mx-auto mb-2 flex h-12 w-12 items-center justify-center rounded-xl bg-destructive/10">
-                <AlertCircle className="h-6 w-6 text-destructive" />
+            <CardHeader className="space-y-1 px-4 pt-6 text-center sm:px-6">
+              <div className="mx-auto mb-2 flex h-10 w-10 items-center justify-center rounded-xl bg-destructive/10 sm:h-12 sm:w-12">
+                <AlertCircle className="h-5 w-5 text-destructive sm:h-6 sm:w-6" />
               </div>
-              <CardTitle className="text-2xl font-bold tracking-tight">
+              <CardTitle className="text-xl font-bold tracking-tight sm:text-2xl">
                 Invalid Reset Link
               </CardTitle>
-              <CardDescription className="text-balance text-muted-foreground">
+              <CardDescription className="text-balance text-sm text-muted-foreground">
                 This password reset link is invalid or has expired. Please request a new reset link.
               </CardDescription>
             </CardHeader>
 
-            <CardContent>
+            <CardContent className="px-4 pb-6 sm:px-6">
               <Button 
                 className="h-11 w-full font-medium transition-all duration-200 hover:shadow-md active:scale-[0.98]"
                 onClick={() => router.push("/login")}
@@ -210,7 +215,7 @@ export default function ResetPasswordPage() {
     return (
       <div className="relative flex min-h-screen flex-col bg-gradient-to-br from-background via-background to-muted/30">
         {/* Header */}
-        <header className="flex items-center justify-between px-6 py-4 sm:px-8">
+        <header className="flex items-center justify-between px-4 py-4 sm:px-6 md:px-8">
           <Link 
             href="/login" 
             className="flex items-center gap-2 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
@@ -218,26 +223,27 @@ export default function ResetPasswordPage() {
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
               <Building2 className="h-4 w-4 text-primary-foreground" />
             </div>
-            <span className="text-sm font-semibold text-foreground">PG Rent Manager</span>
+            <span className="hidden text-sm font-semibold text-foreground sm:inline">PG Rent Manager</span>
           </Link>
+          <AuthThemeToggle />
         </header>
 
         {/* Main Content */}
-        <main className="flex flex-1 items-center justify-center px-4 py-8 sm:px-6">
+        <main className="flex flex-1 items-center justify-center px-4 py-6 sm:px-6 sm:py-8">
           <Card className="w-full max-w-[420px] border-border/50 shadow-lg">
-            <CardHeader className="space-y-1 text-center">
-              <div className="mx-auto mb-2 flex h-12 w-12 items-center justify-center rounded-xl bg-success/10">
-                <CheckCircle2 className="h-6 w-6 text-success" />
+            <CardHeader className="space-y-1 px-4 pt-6 text-center sm:px-6">
+              <div className="mx-auto mb-2 flex h-10 w-10 items-center justify-center rounded-xl bg-success/10 sm:h-12 sm:w-12">
+                <CheckCircle2 className="h-5 w-5 text-success sm:h-6 sm:w-6" />
               </div>
-              <CardTitle className="text-2xl font-bold tracking-tight">
+              <CardTitle className="text-xl font-bold tracking-tight sm:text-2xl">
                 Password Updated
               </CardTitle>
-              <CardDescription className="text-balance text-muted-foreground">
+              <CardDescription className="text-balance text-sm text-muted-foreground">
                 Password updated successfully. Redirecting to login...
               </CardDescription>
             </CardHeader>
 
-            <CardContent>
+            <CardContent className="px-4 pb-6 sm:px-6">
               <Button 
                 className="h-11 w-full font-medium transition-all duration-200 hover:shadow-md active:scale-[0.98]"
                 onClick={() => router.push("/login")}
@@ -259,7 +265,7 @@ export default function ResetPasswordPage() {
   return (
     <div className="relative flex min-h-screen flex-col bg-gradient-to-br from-background via-background to-muted/30">
       {/* Header */}
-      <header className="flex items-center justify-between px-6 py-4 sm:px-8">
+      <header className="flex items-center justify-between px-4 py-4 sm:px-6 md:px-8">
         <Link 
           href="/login" 
           className="flex items-center gap-2 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
@@ -267,26 +273,27 @@ export default function ResetPasswordPage() {
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
             <Building2 className="h-4 w-4 text-primary-foreground" />
           </div>
-          <span className="text-sm font-semibold text-foreground">PG Rent Manager</span>
+          <span className="hidden text-sm font-semibold text-foreground sm:inline">PG Rent Manager</span>
         </Link>
+        <AuthThemeToggle />
       </header>
 
       {/* Main Content */}
-      <main className="flex flex-1 items-center justify-center px-4 py-8 sm:px-6">
+      <main className="flex flex-1 items-center justify-center px-4 py-6 sm:px-6 sm:py-8">
         <Card className="w-full max-w-[420px] border-border/50 shadow-lg">
-          <CardHeader className="space-y-1 text-center">
-            <div className="mx-auto mb-2 flex h-12 w-12 items-center justify-center rounded-xl bg-primary">
-              <Building2 className="h-6 w-6 text-primary-foreground" />
+          <CardHeader className="space-y-1 px-4 pt-6 text-center sm:px-6">
+            <div className="mx-auto mb-2 flex h-10 w-10 items-center justify-center rounded-xl bg-primary sm:h-12 sm:w-12">
+              <Building2 className="h-5 w-5 text-primary-foreground sm:h-6 sm:w-6" />
             </div>
-            <CardTitle className="text-2xl font-bold tracking-tight">
+            <CardTitle className="text-xl font-bold tracking-tight sm:text-2xl">
               Reset Your Password
             </CardTitle>
-            <CardDescription className="text-balance text-muted-foreground">
+            <CardDescription className="text-balance text-sm text-muted-foreground">
               Enter a new password to regain access to your account.
             </CardDescription>
           </CardHeader>
 
-          <CardContent className="space-y-6">
+          <CardContent className="space-y-5 px-4 pb-6 sm:space-y-6 sm:px-6">
             {/* Error Alert */}
             {error && (
               <div className="flex items-center gap-3 rounded-lg border border-destructive/50 bg-destructive/10 px-4 py-3 text-sm text-destructive animate-in fade-in-0 slide-in-from-top-1 duration-200">

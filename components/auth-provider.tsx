@@ -1,8 +1,8 @@
 "use client"
 
 import { createContext, useContext, useState, useEffect, useCallback, type ReactNode } from "react"
-import { useRouter, usePathname } from "next/navigation"
-import { supabase } from "@/lib/supabaseClient"
+import { useRouter } from "next/navigation"
+import { createClient } from "@/lib/supabase/client"
 import type { User, Session } from "@supabase/supabase-js"
 
 interface AuthContextType {
@@ -16,19 +16,17 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
-// Public routes that don't require authentication
-const PUBLIC_ROUTES = ["/login", "/reset-password", "/forgot-password"]
-
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
   const [user, setUser] = useState<User | null>(null)
   const [session, setSession] = useState<Session | null>(null)
   const router = useRouter()
-  const pathname = usePathname()
 
   // Check authentication status on mount and listen for auth changes
   useEffect(() => {
+    const supabase = createClient()
+    
     const checkAuth = async () => {
       try {
         const { data: { session: currentSession } } = await supabase.auth.getSession()
@@ -54,6 +52,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         
         if (event === "SIGNED_OUT") {
           router.push("/login")
+          router.refresh()
+        }
+        
+        if (event === "SIGNED_IN") {
+          router.refresh()
         }
       }
     )
@@ -63,22 +66,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }, [router])
 
-  // Redirect based on auth status
-  useEffect(() => {
-    if (isLoading) return
-
-    const isPublicRoute = PUBLIC_ROUTES.includes(pathname)
-
-    if (!isAuthenticated && !isPublicRoute) {
-      // Redirect to login if not authenticated and trying to access protected route
-      router.push("/login")
-    } else if (isAuthenticated && pathname === "/login") {
-      // Redirect to dashboard if already authenticated and on login page
-      router.push("/")
-    }
-  }, [isAuthenticated, isLoading, pathname, router])
-
   const login = useCallback(async (email: string, password: string) => {
+    const supabase = createClient()
+    
     try {
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
@@ -86,7 +76,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       })
 
       if (error) {
-        return { success: false, error: "Invalid email or password. Please try again." }
+        return { success: false, error: "Invalid email or password." }
       }
 
       if (data.session) {
@@ -94,6 +84,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setUser(data.user)
         setIsAuthenticated(true)
         router.push("/")
+        router.refresh()
         return { success: true }
       }
 
@@ -104,12 +95,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [router])
 
   const logout = useCallback(async () => {
+    const supabase = createClient()
+    
     try {
       await supabase.auth.signOut()
       setSession(null)
       setUser(null)
       setIsAuthenticated(false)
       router.push("/login")
+      router.refresh()
     } catch {
       // Error signing out
     }

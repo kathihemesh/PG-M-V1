@@ -7,7 +7,8 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { supabase } from "@/lib/supabaseClient"
+import { createClient } from "@/lib/supabase/client"
+import { AuthThemeToggle } from "@/components/auth-theme-toggle"
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState("")
@@ -47,6 +48,7 @@ export default function ForgotPasswordPage() {
     setIsSubmitting(true)
 
     try {
+      const supabase = createClient()
       const { error: resetError } = await supabase.auth.resetPasswordForEmail(email, {
         redirectTo: `${window.location.origin}/reset-password`,
       })
@@ -70,7 +72,7 @@ export default function ForgotPasswordPage() {
     return (
       <div className="relative flex min-h-screen flex-col bg-gradient-to-br from-background via-background to-muted/30">
         {/* Header */}
-        <header className="flex items-center justify-between px-6 py-4 sm:px-8">
+        <header className="flex items-center justify-between px-4 py-4 sm:px-6 md:px-8">
           <Link 
             href="/login" 
             className="flex items-center gap-2 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
@@ -78,30 +80,31 @@ export default function ForgotPasswordPage() {
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
               <Building2 className="h-4 w-4 text-primary-foreground" />
             </div>
-            <span className="text-sm font-semibold text-foreground">PG Rent Manager</span>
+            <span className="hidden text-sm font-semibold text-foreground sm:inline">PG Rent Manager</span>
           </Link>
+          <AuthThemeToggle />
         </header>
 
         {/* Main Content */}
-        <main className="flex flex-1 items-center justify-center px-4 py-8 sm:px-6">
+        <main className="flex flex-1 items-center justify-center px-4 py-6 sm:px-6 sm:py-8">
           <Card className="w-full max-w-[420px] border-border/50 shadow-lg">
-            <CardHeader className="space-y-1 text-center">
-              <div className="mx-auto mb-2 flex h-12 w-12 items-center justify-center rounded-xl bg-success/10">
-                <CheckCircle2 className="h-6 w-6 text-success" />
+            <CardHeader className="space-y-1 px-4 pt-6 text-center sm:px-6">
+              <div className="mx-auto mb-2 flex h-10 w-10 items-center justify-center rounded-xl bg-success/10 sm:h-12 sm:w-12">
+                <CheckCircle2 className="h-5 w-5 text-success sm:h-6 sm:w-6" />
               </div>
-              <CardTitle className="text-2xl font-bold tracking-tight">
+              <CardTitle className="text-xl font-bold tracking-tight sm:text-2xl">
                 Check Your Email
               </CardTitle>
-              <CardDescription className="text-balance text-muted-foreground">
+              <CardDescription className="text-balance text-sm text-muted-foreground">
                 Password reset link sent. Please check your email.
               </CardDescription>
             </CardHeader>
 
-            <CardContent className="space-y-4">
-              <div className="rounded-lg border border-border bg-muted/30 px-4 py-3">
+            <CardContent className="space-y-4 px-4 pb-6 sm:px-6">
+              <div className="rounded-lg border border-border bg-muted/30 px-3 py-3 sm:px-4">
                 <p className="text-center text-sm text-muted-foreground">
                   {"We've sent a password reset link to "}
-                  <span className="font-medium text-foreground">{email}</span>
+                  <span className="block font-medium text-foreground sm:inline">{email}</span>
                 </p>
               </div>
               
@@ -141,7 +144,7 @@ export default function ForgotPasswordPage() {
   return (
     <div className="relative flex min-h-screen flex-col bg-gradient-to-br from-background via-background to-muted/30">
       {/* Header */}
-      <header className="flex items-center justify-between px-6 py-4 sm:px-8">
+      <header className="flex items-center justify-between px-4 py-4 sm:px-6 md:px-8">
         <Link 
           href="/login" 
           className="flex items-center gap-2 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
@@ -149,26 +152,27 @@ export default function ForgotPasswordPage() {
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
             <Building2 className="h-4 w-4 text-primary-foreground" />
           </div>
-          <span className="text-sm font-semibold text-foreground">PG Rent Manager</span>
+          <span className="hidden text-sm font-semibold text-foreground sm:inline">PG Rent Manager</span>
         </Link>
+        <AuthThemeToggle />
       </header>
 
       {/* Main Content */}
-      <main className="flex flex-1 items-center justify-center px-4 py-8 sm:px-6">
+      <main className="flex flex-1 items-center justify-center px-4 py-6 sm:px-6 sm:py-8">
         <Card className="w-full max-w-[420px] border-border/50 shadow-lg">
-          <CardHeader className="space-y-1 text-center">
-            <div className="mx-auto mb-2 flex h-12 w-12 items-center justify-center rounded-xl bg-primary">
-              <Mail className="h-6 w-6 text-primary-foreground" />
+          <CardHeader className="space-y-1 px-4 pt-6 text-center sm:px-6">
+            <div className="mx-auto mb-2 flex h-10 w-10 items-center justify-center rounded-xl bg-primary sm:h-12 sm:w-12">
+              <Mail className="h-5 w-5 text-primary-foreground sm:h-6 sm:w-6" />
             </div>
-            <CardTitle className="text-2xl font-bold tracking-tight">
+            <CardTitle className="text-xl font-bold tracking-tight sm:text-2xl">
               Forgot Password?
             </CardTitle>
-            <CardDescription className="text-balance text-muted-foreground">
+            <CardDescription className="text-balance text-sm text-muted-foreground">
               Enter your email address and we'll send you a link to reset your password.
             </CardDescription>
           </CardHeader>
 
-          <CardContent className="space-y-6">
+          <CardContent className="space-y-5 px-4 pb-6 sm:space-y-6 sm:px-6">
             {/* Error Alert */}
             {error && (
               <div className="flex items-center gap-3 rounded-lg border border-destructive/50 bg-destructive/10 px-4 py-3 text-sm text-destructive animate-in fade-in-0 slide-in-from-top-1 duration-200">

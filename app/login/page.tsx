@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { useAuth } from "@/components/auth-provider"
+import { AuthThemeToggle } from "@/components/auth-theme-toggle"
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false)
@@ -67,7 +68,7 @@ export default function LoginPage() {
   return (
     <div className="relative flex min-h-screen flex-col bg-gradient-to-br from-background via-background to-muted/30">
       {/* Header */}
-      <header className="flex items-center justify-between px-6 py-4 sm:px-8">
+      <header className="flex items-center justify-between px-4 py-4 sm:px-6 md:px-8">
         <Link 
           href="/login" 
           className="flex items-center gap-2 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
@@ -75,26 +76,27 @@ export default function LoginPage() {
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
             <Building2 className="h-4 w-4 text-primary-foreground" />
           </div>
-          <span className="text-sm font-semibold text-foreground">PG Rent Manager</span>
+          <span className="hidden text-sm font-semibold text-foreground sm:inline">PG Rent Manager</span>
         </Link>
+        <AuthThemeToggle />
       </header>
 
       {/* Main Content */}
-      <main className="flex flex-1 items-center justify-center px-4 py-8 sm:px-6">
+      <main className="flex flex-1 items-center justify-center px-4 py-6 sm:px-6 sm:py-8">
         <Card className="w-full max-w-[420px] border-border/50 shadow-lg">
-          <CardHeader className="space-y-1 text-center">
-            <div className="mx-auto mb-2 flex h-12 w-12 items-center justify-center rounded-xl bg-primary">
-              <Building2 className="h-6 w-6 text-primary-foreground" />
+          <CardHeader className="space-y-1 px-4 pt-6 text-center sm:px-6">
+            <div className="mx-auto mb-2 flex h-10 w-10 items-center justify-center rounded-xl bg-primary sm:h-12 sm:w-12">
+              <Building2 className="h-5 w-5 text-primary-foreground sm:h-6 sm:w-6" />
             </div>
-            <CardTitle className="text-2xl font-bold tracking-tight">
+            <CardTitle className="text-xl font-bold tracking-tight sm:text-2xl">
               Welcome Back
             </CardTitle>
-            <CardDescription className="text-balance text-muted-foreground">
+            <CardDescription className="text-balance text-sm text-muted-foreground">
               Sign in to manage your PG tenants, rooms, and rent payments.
             </CardDescription>
           </CardHeader>
 
-          <CardContent className="space-y-6">
+          <CardContent className="space-y-5 px-4 pb-6 sm:space-y-6 sm:px-6">
             {/* Error Alert */}
             {error && (
               <div className="flex items-center gap-3 rounded-lg border border-destructive/50 bg-destructive/10 px-4 py-3 text-sm text-destructive animate-in fade-in-0 slide-in-from-top-1 duration-200">

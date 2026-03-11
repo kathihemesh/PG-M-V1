@@ -157,7 +157,8 @@ export function Sidebar({ mobileOpen, setMobileOpen, collapsed, setCollapsed }: 
         aria-label="Main navigation"
         aria-hidden={!mobileOpen}
         className={cn(
-          "fixed inset-y-0 left-0 z-50 flex flex-col overflow-hidden border-r border-border bg-card shadow-xl transition-all duration-300 ease-in-out lg:z-40 lg:translate-x-0 lg:shadow-none lg:aria-[hidden=true]:block",
+          "fixed inset-y-0 left-0 z-50 flex flex-col overflow-hidden border-r border-border bg-card shadow-xl lg:z-40 lg:translate-x-0 lg:shadow-none lg:aria-[hidden=true]:block",
+          "transition-transform duration-300 ease-in-out lg:transition-[width] lg:duration-200",
           mobileOpen ? "translate-x-0" : "-translate-x-full",
           collapsed ? "lg:w-[72px]" : "lg:w-64",
           "w-[280px]"
@@ -177,8 +178,8 @@ export function Sidebar({ mobileOpen, setMobileOpen, collapsed, setCollapsed }: 
               <Building2 className="h-5 w-5 text-primary-foreground" />
             </div>
             <span className={cn(
-              "whitespace-nowrap text-lg font-semibold tracking-tight text-foreground transition-all duration-300 ease-in-out",
-              collapsed ? "lg:w-0 lg:opacity-0" : "lg:w-auto lg:opacity-100"
+              "whitespace-nowrap text-lg font-semibold tracking-tight text-foreground",
+              collapsed ? "lg:hidden" : "lg:inline"
             )}>
               PG Manager
             </span>
@@ -201,12 +202,12 @@ export function Sidebar({ mobileOpen, setMobileOpen, collapsed, setCollapsed }: 
             {navItems.map((item) => {
               const isActive = pathname === item.href
               const linkContent = (
-                <Link
+                  <Link
                   href={item.href}
                   aria-current={isActive ? "page" : undefined}
                   aria-describedby={collapsed ? undefined : `${navId}-${item.label.toLowerCase()}-desc`}
                   className={cn(
-                    "flex items-center gap-3 overflow-hidden rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-300 ease-in-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+                    "flex items-center gap-3 overflow-hidden rounded-lg px-3 py-2.5 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
                     isActive
                       ? "bg-primary text-primary-foreground shadow-sm"
                       : "text-muted-foreground hover:bg-muted hover:text-foreground",
@@ -215,8 +216,8 @@ export function Sidebar({ mobileOpen, setMobileOpen, collapsed, setCollapsed }: 
                 >
                   <item.icon className="h-5 w-5 shrink-0" aria-hidden="true" />
                   <span className={cn(
-                    "whitespace-nowrap transition-all duration-300 ease-in-out",
-                    collapsed ? "lg:w-0 lg:opacity-0" : "lg:w-auto lg:opacity-100"
+                    "whitespace-nowrap",
+                    collapsed ? "lg:hidden" : "lg:inline"
                   )}>{item.label}</span>
                 </Link>
               )
@@ -225,13 +226,13 @@ export function Sidebar({ mobileOpen, setMobileOpen, collapsed, setCollapsed }: 
                 <li key={item.href}>
                   {collapsed ? (
                     <Tooltip>
-                      <TooltipTrigger asChild className="hidden lg:flex">
+                      <TooltipTrigger asChild className="hidden lg:flex w-full">
                         {linkContent}
                       </TooltipTrigger>
                       <TooltipContent side="right" className="hidden lg:block">
                         {item.label}
                       </TooltipContent>
-                      <div className="lg:hidden">{linkContent}</div>
+                      <div className="lg:hidden w-full">{linkContent}</div>
                     </Tooltip>
                   ) : (
                     linkContent
@@ -262,7 +263,7 @@ export function Sidebar({ mobileOpen, setMobileOpen, collapsed, setCollapsed }: 
               onClick={() => setCollapsed(!collapsed)}
               aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
               className={cn(
-                "w-full overflow-hidden text-muted-foreground transition-all duration-300 ease-in-out hover:bg-muted hover:text-foreground",
+                "w-full overflow-hidden text-muted-foreground transition-colors hover:bg-muted hover:text-foreground",
                 collapsed ? "h-10 justify-center" : "justify-start gap-3"
               )}
             >
@@ -279,11 +280,11 @@ export function Sidebar({ mobileOpen, setMobileOpen, collapsed, setCollapsed }: 
 
           {/* Version info - always at very bottom */}
           <div className={cn(
-            "overflow-hidden border-t border-border p-3 transition-all duration-300 ease-in-out",
+            "overflow-hidden border-t border-border p-3",
             collapsed && "lg:p-2"
           )}>
             <div className={cn(
-              "overflow-hidden rounded-lg bg-muted/50 transition-all duration-300 ease-in-out",
+              "overflow-hidden rounded-lg bg-muted/50",
               collapsed ? "lg:p-2" : "p-3"
             )}>
               {collapsed ? (
