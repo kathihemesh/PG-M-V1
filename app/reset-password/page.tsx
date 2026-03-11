@@ -69,13 +69,31 @@ export default function ResetPasswordPage() {
     checkResetToken()
   }, [])
 
+  const validatePassword = (password: string): string | null => {
+    if (!password.trim()) {
+      return "Password is required"
+    }
+    if (password.length < 8) {
+      return "Password must be at least 8 characters"
+    }
+    if (!/[A-Z]/.test(password)) {
+      return "Password must contain at least one uppercase letter"
+    }
+    if (!/[a-z]/.test(password)) {
+      return "Password must contain at least one lowercase letter"
+    }
+    if (!/[0-9]/.test(password)) {
+      return "Password must contain at least one number"
+    }
+    return null
+  }
+
   const validateForm = () => {
     const errors: { password?: string; confirmPassword?: string } = {}
     
-    if (!password.trim()) {
-      errors.password = "Password is required"
-    } else if (password.length < 8) {
-      errors.password = "Password must be at least 8 characters"
+    const passwordError = validatePassword(password)
+    if (passwordError) {
+      errors.password = passwordError
     }
     
     if (!confirmPassword.trim()) {
@@ -112,6 +130,11 @@ export default function ResetPasswordPage() {
       // Sign out after password update to force re-login
       await supabase.auth.signOut()
       setIsSuccess(true)
+      
+      // Redirect to login after 2 seconds
+      setTimeout(() => {
+        router.push("/login")
+      }, 2000)
     } catch {
       setError("An unexpected error occurred. Please try again.")
     }
@@ -210,7 +233,7 @@ export default function ResetPasswordPage() {
                 Password Updated
               </CardTitle>
               <CardDescription className="text-balance text-muted-foreground">
-                Password successfully updated. You can now sign in with your new password.
+                Password updated successfully. Redirecting to login...
               </CardDescription>
             </CardHeader>
 
@@ -305,9 +328,13 @@ export default function ResetPasswordPage() {
                     )}
                   </button>
                 </div>
-                {validationError.password && (
+                {validationError.password ? (
                   <p id="password-error" className="text-sm text-destructive">
                     {validationError.password}
+                  </p>
+                ) : (
+                  <p className="text-xs text-muted-foreground">
+                    Must be at least 8 characters with uppercase, lowercase, and number
                   </p>
                 )}
               </div>
