@@ -2,45 +2,66 @@
 
 import { createContext, useContext, useState, useEffect, useCallback, type ReactNode } from "react"
 import { useRouter, usePathname } from "next/navigation"
+import { supabase } from "@/lib/supabaseClient"
+import type { User, Session } from "@supabase/supabase-js"
 
 interface AuthContextType {
   isAuthenticated: boolean
   isLoading: boolean
-  login: (email: string, password: string) => { success: boolean; error?: string }
-  logout: () => void
+  user: User | null
+  session: Session | null
+  login: (email: string, password: string) => Promise<{ success: boolean; error?: string }>
+  logout: () => Promise<void>
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
-// Predefined credentials
-const VALID_EMAIL = "admin@gmail.com"
-const VALID_PASSWORD = "admin@123"
-const AUTH_STORAGE_KEY = "pg-manager-auth"
-
 // Public routes that don't require authentication
-const PUBLIC_ROUTES = ["/login"]
+const PUBLIC_ROUTES = ["/login", "/reset-password"]
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
+  const [user, setUser] = useState<User | null>(null)
+  const [session, setSession] = useState<Session | null>(null)
   const router = useRouter()
   const pathname = usePathname()
 
-  // Check authentication status on mount
+  // Check authentication status on mount and listen for auth changes
   useEffect(() => {
-    const checkAuth = () => {
+    const checkAuth = async () => {
       try {
-        const authData = localStorage.getItem(AUTH_STORAGE_KEY)
-        if (authData === "true") {
+        const { data: { session: currentSession } } = await supabase.auth.getSession()
+        if (currentSession) {
+          setSession(currentSession)
+          setUser(currentSession.user)
           setIsAuthenticated(true)
         }
       } catch {
-        // localStorage not available
+        // Error getting session
       }
       setIsLoading(false)
     }
+    
     checkAuth()
-  }, [])
+
+    // Listen for auth state changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      async (event, newSession) => {
+        setSession(newSession)
+        setUser(newSession?.user ?? null)
+        setIsAuthenticated(!!newSession)
+        
+        if (event === "SIGNED_OUT") {
+          router.push("/login")
+        }
+      }
+    )
+
+    return () => {
+      subscription.unsubscribe()
+    }
+  }, [router])
 
   // Redirect based on auth status
   useEffect(() => {
@@ -57,32 +78,45 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }, [isAuthenticated, isLoading, pathname, router])
 
-  const login = useCallback((email: string, password: string) => {
-    if (email === VALID_EMAIL && password === VALID_PASSWORD) {
-      setIsAuthenticated(true)
-      try {
-        localStorage.setItem(AUTH_STORAGE_KEY, "true")
-      } catch {
-        // localStorage not available
+  const login = useCallback(async (email: string, password: string) => {
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      })
+
+      if (error) {
+        return { success: false, error: "Invalid email or password. Please try again." }
       }
-      router.push("/")
-      return { success: true }
+
+      if (data.session) {
+        setSession(data.session)
+        setUser(data.user)
+        setIsAuthenticated(true)
+        router.push("/")
+        return { success: true }
+      }
+
+      return { success: false, error: "Login failed. Please try again." }
+    } catch {
+      return { success: false, error: "An unexpected error occurred. Please try again." }
     }
-    return { success: false, error: "Invalid email or password. Please try again." }
   }, [router])
 
-  const logout = useCallback(() => {
-    setIsAuthenticated(false)
+  const logout = useCallback(async () => {
     try {
-      localStorage.removeItem(AUTH_STORAGE_KEY)
+      await supabase.auth.signOut()
+      setSession(null)
+      setUser(null)
+      setIsAuthenticated(false)
+      router.push("/login")
     } catch {
-      // localStorage not available
+      // Error signing out
     }
-    router.push("/login")
   }, [router])
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, isLoading, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, isLoading, user, session, login, logout }}>
       {children}
     </AuthContext.Provider>
   )
